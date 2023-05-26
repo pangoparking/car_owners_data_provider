@@ -39,14 +39,14 @@ public class CODPServiceImpl implements CODPService {
 	@Override
 	public RawSqlData getCarInfo(CarData carData) {
 		log.trace("CODPServiceImpl : getCarInfo :  carData == {}", carData);
-		Object[] carAndOwnerData = getCarAndOwnerInfoFromDB(carData.carID);
+		Object[] carAndOwnerData = getCarAndOwnerDataFromDB(carData.carID);
 		log.trace("getCarInfo :  carAndOwnerData == {}", carAndOwnerData);
-		Object[] lotAndAreaData = getlotAndAreaInfoFromDB(carData.parkingID);
+		Object[] lotAndAreaData = getlotAndAreaDataFromDB(carData.parkingID);
 		log.trace("getCarInfo :  lotAndAreaData == {}", lotAndAreaData);
 		return configureRawSqlData(carAndOwnerData, lotAndAreaData);
 	}
 
-	private Object[] getlotAndAreaInfoFromDB(long parkingID) {
+	private Object[] getlotAndAreaDataFromDB(long parkingID) {
 		Object[] responseFromDB = null;
 		try {
 			String queryBody = getLotAndParkingQueryBody(parkingID);
@@ -56,15 +56,10 @@ public class CODPServiceImpl implements CODPService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return responseFromDB;
 	}
-
-	private String getLotAndParkingQueryBody(long parkingID) {
-		return "SELECT" + " " + queryLotAndAreaColumns + " " + queryLotAndAreaFromStatement;
-	}
-
-	private Object[] getCarAndOwnerInfoFromDB(long carNumber) {
+	
+	private Object[] getCarAndOwnerDataFromDB(long carNumber) {
 		Object[] responseFromDB = null;
 		try {
 			String queryBody = getCarAndOwnerQueryBody(carNumber);
@@ -75,7 +70,14 @@ public class CODPServiceImpl implements CODPService {
 			e.printStackTrace();
 		}
 		return responseFromDB;
+		
 	}
+
+	private String getLotAndParkingQueryBody(long parkingID) {
+		return "SELECT" + " " + queryLotAndAreaColumns + " " + queryLotAndAreaFromStatement;
+	}
+
+
 
 	private String getCarAndOwnerQueryBody(long carID) {
 		return "SELECT" + " " + queryCarAndOwnerColumns + " " + queryCarAndOwnerFromStatement;
